@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="stat-client" />
+        <module name="config-server" />
+        <module name="discovery-server" />
+        <module name="stat-server" />
+        <module name="gateway-server" />
+        <module name="main-service" />
+        <module name="stat-dto" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="config-server" options="-parameters" />
+      <module name="core" options="" />
+      <module name="discovery-server" options="-parameters" />
+      <module name="gateway-server" options="-parameters" />
+      <module name="infra" options="" />
+      <module name="main-service" options="-parameters" />
+      <module name="stat-client" options="-parameters" />
+      <module name="stat-dto" options="-parameters" />
+      <module name="stat-server" options="-parameters" />
+    </option>
+  </component>
+</project>
