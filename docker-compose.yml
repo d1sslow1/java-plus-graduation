@@ -1,42 +1,13 @@
 services:
-  discovery-server:
-    build: ./infra/discovery-server
-    container_name: discovery-server
+  main-db:
+    image: postgres:16.1
+    container_name: postgres-main-db
     ports:
-      - "8761:8761"
+      - "6542:5432"
     environment:
-      - SERVER_PORT=8761
-      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
-      - EUREKA_CLIENT_FETCH_REGISTRY=false
-
-  config-server:
-    build: ./infra/config-server
-    container_name: config-server
-    ports:
-      - "8888:8888"
-    depends_on:
-      - discovery-server
-    environment:
-      - SERVER_PORT=8888
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
-      - SPRING_PROFILES_ACTIVE=native
-      - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCHLOCATIONS=file:/configs
-
-  stats-server:
-    build: ./stat/stat-server
-    container_name: stats-server
-    ports:
-      - "9090:9090"
-    depends_on:
-      - stats-db
-      - discovery-server
-      - config-server
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
-      - SPRING_DATASOURCE_USERNAME=ewm
-      - SPRING_DATASOURCE_PASSWORD=ewm
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
-      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - POSTGRES_DB=main-db
+      - POSTGRES_USER=ewm
+      - POSTGRES_PASSWORD=ewm
 
   stats-db:
     image: postgres:16.1
@@ -55,21 +26,10 @@ services:
       - "8080:8080"
     depends_on:
       - main-db
-      - discovery-server
-      - config-server
     environment:
+      - SERVER_PORT=8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/main-db
       - SPRING_DATASOURCE_USERNAME=ewm
       - SPRING_DATASOURCE_PASSWORD=ewm
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
-      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
-
-  main-db:
-    image: postgres:16.1
-    container_name: postgres-main-db
-    ports:
-      - "6542:5432"
-    environment:
-      - POSTGRES_DB=main-db
-      - POSTGRES_USER=ewm
-      - POSTGRES_PASSWORD=ewm
+      - SPRING_CLOUD_CONFIG_ENABLED=false
+      - EUREKA_CLIENT_ENABLED=false
