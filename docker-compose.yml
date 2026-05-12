@@ -19,6 +19,21 @@ services:
       - POSTGRES_USER=ewm
       - POSTGRES_PASSWORD=ewm
 
+  stats-server:
+    build: ./stat/stat-server
+    container_name: stats-server
+    ports:
+      - "9090:9090"
+    depends_on:
+      - stats-db
+    environment:
+      - SERVER_PORT=9090
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
+      - SPRING_DATASOURCE_USERNAME=ewm
+      - SPRING_DATASOURCE_PASSWORD=ewm
+      - SPRING_CLOUD_CONFIG_ENABLED=false
+      - EUREKA_CLIENT_ENABLED=false
+
   ewm-service:
     build: ./core/main-service
     container_name: ewm-service
